@@ -1,6 +1,6 @@
 <?php
 $servername = "localhost";
-$username = "root";
+$username = "root"; // Root is my local setup
 $password = "";
 $dbname = "membership_directory";
 
