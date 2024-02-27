@@ -8,9 +8,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $conn->real_escape_string($_POST['email']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
 
+    // Calculate membership start and expiry dates
+    $membershipStart = date('Y-m-d'); // Set to current date
+    $membershipExpiry = date('Y-m-d', strtotime('+1 year')); // Set to one year from today
+
     // Prepare SQL statement to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO members (fullname, email, password, status) VALUES (?, ?, ?, 'active')");
-    $stmt->bind_param("sss", $fullname, $email, $password);
+    // Updated to include membership_start and membership_expiry fields
+    $stmt = $conn->prepare("INSERT INTO members (fullname, email, password, membership_start, membership_expiry, status) VALUES (?, ?, ?, ?, ?, 'active')");
+    // Bind parameters including the dates
+    $stmt->bind_param("sssss", $fullname, $email, $password, $membershipStart, $membershipExpiry);
 
     // Execute the statement
     if ($stmt->execute()) {
@@ -25,3 +31,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
+
